@@ -79,3 +79,4 @@ Thumbs.db
 
 # Custom
 data/*.*
+!data/input-data-template.xlsx
