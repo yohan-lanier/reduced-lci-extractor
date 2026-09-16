@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import TypedDict
+from typing import TypedDict, Dict, List, cast
 
 import pandas as pd
 import bw2data as bd
@@ -12,14 +12,25 @@ from relex.constants import VALID_DATABASES
 
 
 class InputData(TypedDict):
-    activities: pd.DataFrame
-    impact_cat: pd.DataFrame
+    activities: List[Dict[str, str]]
+    impact_cat: List[Dict[str, str]]
 
 
 def load_input_data(filename: str) -> InputData:
+    file = pd.ExcelFile(DATA / f"{filename}.xlsx")
     return {
-        "activities": pd.read_excel(DATA / f"{filename}.xlsx", sheet_name="activities"),
-        "impact_cat": pd.read_excel(DATA / f"{filename}.xlsx", sheet_name="methods"),
+        "activities": cast(
+            List[Dict[str, str]],
+            pd.read_excel(file, sheet_name="activities").to_dict(
+                orient="records"
+            ),
+        ),
+        "impact_cat": cast(
+            List[Dict[str, str]],
+            pd.read_excel(file, sheet_name="methods").to_dict(
+                orient="records"
+            ),
+        ),
     }
 
 

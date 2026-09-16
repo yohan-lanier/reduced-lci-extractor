@@ -15,7 +15,6 @@ class RelexParser(Tap):
             "--bw-project-name",
             help="name of the brightway project that will be used",
             dest="bw_project_name",
-            required=True,
         )
 
         self.add_argument(
@@ -29,10 +28,9 @@ class RelexParser(Tap):
 
         self.add_argument(
             "-i",
-            "--input-data",
+            "--input-data-filename",
             help="name of the file containing input data (activities and methods)",
             dest="input_data_filename",
-            required=True,
         )
 
         self.add_argument(
