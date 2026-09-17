@@ -1,6 +1,7 @@
 from relex.args import RelexParser
-from relex.logger import configure_logger
 from relex.compute_reduced_inventories import get_reduced_inventories
+from relex.logger import configure_logger
+from relex.save import save_reduced_inventory_data
 from relex.utils import build_ecoinvent_in_bw, load_input_data
 
 if __name__ == "__main__":
@@ -18,3 +19,4 @@ if __name__ == "__main__":
         input_data["impact_cat"],
         database=database,
     )
+    save_reduced_inventory_data(reduced_inventory_data, output_file="o-test")

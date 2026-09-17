@@ -1,14 +1,14 @@
 import logging
 import os
-from typing import TypedDict, Dict, List, cast
+from typing import Dict, List, TypedDict, cast
 
-import pandas as pd
 import bw2data as bd
 import bw2io as bi
+import pandas as pd
 from dotenv import load_dotenv
 
-from relex.paths import DATA
 from relex.constants import VALID_DATABASES
+from relex.paths import DATA
 
 
 class InputData(TypedDict):
@@ -21,15 +21,11 @@ def load_input_data(filename: str) -> InputData:
     return {
         "activities": cast(
             List[Dict[str, str]],
-            pd.read_excel(file, sheet_name="activities").to_dict(
-                orient="records"
-            ),
+            pd.read_excel(file, sheet_name="activities").to_dict(orient="records"),
         ),
         "impact_cat": cast(
             List[Dict[str, str]],
-            pd.read_excel(file, sheet_name="methods").to_dict(
-                orient="records"
-            ),
+            pd.read_excel(file, sheet_name="methods").to_dict(orient="records"),
         ),
     }
 
@@ -73,6 +69,9 @@ def assert_input_databases_is_valid(database: str):
     assert (
         database in VALID_DATABASES
     ), f"Database {database} is not supported, make sure input databases are supported"
-    logging.info(
-        "Provided database %s is valid. Starting to build in brightway", database
-    )
+    logging.info("Provided database %s is valid. Starting to build in brightway", database)
+
+
+class ReducedInventoriesData(TypedDict):
+    top_emissions_per_activity: pd.DataFrame
+    flows_cfs: pd.DataFrame
