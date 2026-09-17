@@ -123,7 +123,7 @@ def get_cfs_for_elem_flow_list(flows: List[int], bw_methods: List) -> pd.DataFra
             .merge(method_cfs, how="left", on="id")
             .fillna(0)
         )
-        flows_cf.loc[:, "method"] = method_key
+        flows_cf.loc[:, "method"] = f"{method_key[1]} - {method_key[2]}"
         cfs = pd.concat([cfs, flows_cf])
 
     return cfs
