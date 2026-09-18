@@ -1,11 +1,14 @@
 import pandas as pd
 
-from relex.paths import DATA
+from relex.paths import OUTPUT_DATA
 from relex.utils import ReducedInventoriesData
 
 
 def save_reduced_inventory_data(reduced_inventory_data: ReducedInventoriesData, output_file: str):
-    with pd.ExcelWriter(DATA / f"{output_file}.xlsx") as writer:
+    if not OUTPUT_DATA.exists():
+        OUTPUT_DATA.mkdir()
+
+    with pd.ExcelWriter(OUTPUT_DATA / f"{output_file}.xlsx") as writer:
         reduced_inventory_data["top_emissions_per_activity"].pivot(
             index="elementary_flow",
             columns="technosphere_flow",

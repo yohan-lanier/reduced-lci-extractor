@@ -8,7 +8,7 @@ import pandas as pd
 from dotenv import load_dotenv
 
 from relex.constants import VALID_DATABASES
-from relex.paths import DATA
+from relex.paths import INPUT_DATA
 
 
 class InputData(TypedDict):
@@ -17,7 +17,7 @@ class InputData(TypedDict):
 
 
 def load_input_data(filename: str) -> InputData:
-    file = pd.ExcelFile(DATA / f"{filename}.xlsx")
+    file = pd.ExcelFile(INPUT_DATA / f"{filename}.xlsx")
     return {
         "activities": cast(
             List[Dict[str, str]],

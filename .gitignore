@@ -78,5 +78,5 @@ ehthumbs.db
 Thumbs.db
 
 # Custom
-data/*.*
-!data/input-data-template.xlsx
+data/*/*.*
+!data/input/input-data-template.xlsx
