@@ -109,7 +109,7 @@ def compute_top_emissions_for_all_data(
             ).drop(columns="lca_score")
             top_elem_flows.loc[:, "activity_id"] = bw_activity.id
             results = pd.concat([results, top_elem_flows])
-
+    results = results.groupby(by=["flow_id", "activity_id"]).first().reset_index()
     results["elementary_flow"] = results["flow_id"].apply(create_label_from_flow_id)
     results["technosphere_flow"] = results["activity_id"].apply(create_label_from_flow_id)
     return results
