@@ -7,7 +7,7 @@ class RelexParser(Tap):
     bw_project_name: str
     database: str
     input_data_filename: str
-    cutoff: float
+    cutoff: float = 0.01
     save_filename: str = "output-file"
     overwrite_lca_databases: bool = False
 
@@ -41,6 +41,8 @@ class RelexParser(Tap):
             help="cutoff value to apply when getting top emissions of an "
             "activity for a given impact category",
             dest="cutoff",
+            required=False,
+            default=0.01,
         )
 
         self.add_argument(

@@ -38,10 +38,13 @@ def get_reduced_inventories(
         len(unique_elem_flows),
     )
     logging.info("[...] Retreiving CFs for top emissions and provided impact categories")
-
     return {
-        "top_emissions_per_activity": top_emissions_for_all_data,
-        "flows_cfs": get_cfs_for_elem_flow_list(list(unique_elem_flows), bw_methods),
+        "top_emissions_per_activity": top_emissions_for_all_data[
+            ["elementary_flow", "technosphere_flow", "inventory_amount"]
+        ],
+        "flows_cfs": get_cfs_for_elem_flow_list(list(unique_elem_flows), bw_methods)[
+            ["elementary_flow", "cf", "method"]
+        ],
     }
 
 
@@ -107,7 +110,29 @@ def compute_top_emissions_for_all_data(
             top_elem_flows.loc[:, "activity_id"] = bw_activity.id
             results = pd.concat([results, top_elem_flows])
 
+    results["elementary_flow"] = results["flow_id"].apply(create_label_from_flow_id)
+    results["technosphere_flow"] = results["activity_id"].apply(create_label_from_flow_id)
     return results
+
+
+def create_label_from_flow_id(flow_id: int) -> str:
+    node = bd.get_node(id=flow_id).as_dict()
+    node_type = node["type"]
+    if node_type in ["emission", "natural resource"]:
+        return create_label_for_elem_flow(node)
+    if node_type == "processwithreferenceproduct":
+        return create_label_for_tech_flow(node)
+
+    logging.error("Node type %s not supported for label creation", node_type)
+    raise NotImplementedError
+
+
+def create_label_for_elem_flow(node: Dict) -> str:
+    return f"{node["name"]}, {node["categories"]} [{node["unit"]}]"
+
+
+def create_label_for_tech_flow(node: Dict) -> str:
+    return f"{node["name"]}, {node["reference product"]} | {node["location"]} [{node["unit"]}]"
 
 
 def get_cfs_for_elem_flow_list(flows: List[int], bw_methods: List) -> pd.DataFrame:
@@ -121,5 +146,7 @@ def get_cfs_for_elem_flow_list(flows: List[int], bw_methods: List) -> pd.DataFra
         )
         flows_cf.loc[:, "method"] = f"{method_key[1]} - {method_key[2]}"
         cfs = pd.concat([cfs, flows_cf])
+
+    cfs["elementary_flow"] = cfs["id"].apply(create_label_from_flow_id)
 
     return cfs
