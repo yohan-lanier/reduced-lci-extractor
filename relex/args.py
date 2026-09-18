@@ -7,6 +7,8 @@ class RelexParser(Tap):
     bw_project_name: str
     database: str
     input_data_filename: str
+    cutoff: float
+    save_filename: str = "output-file"
     overwrite_lca_databases: bool = False
 
     def configure(self) -> None:
@@ -31,6 +33,23 @@ class RelexParser(Tap):
             "--input-data-filename",
             help="name of the file containing input data (activities and methods)",
             dest="input_data_filename",
+        )
+
+        self.add_argument(
+            "-c",
+            "--cutoff",
+            help="cutoff value to apply when getting top emissions of an "
+            "activity for a given impact category",
+            dest="cutoff",
+        )
+
+        self.add_argument(
+            "-s",
+            "--save-filename",
+            help="name of the output file containing reduced inventory data.",
+            dest="save_filename",
+            default="output-file",
+            required=False,
         )
 
         self.add_argument(

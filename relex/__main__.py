@@ -18,5 +18,6 @@ if __name__ == "__main__":
         input_data["activities"],
         input_data["impact_cat"],
         database=database,
+        cutoff=args.cutoff,
     )
-    save_reduced_inventory_data(reduced_inventory_data, output_file="o-test")
+    save_reduced_inventory_data(reduced_inventory_data, output_file=args.save_filename)
